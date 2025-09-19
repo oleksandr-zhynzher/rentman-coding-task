@@ -1,5 +1,7 @@
 # Tree Viewer Application
 
+**Requirements:** Node.js 18.19.0 or higher
+
 ## Quick Start
 
 1. **Install all dependencies:**
