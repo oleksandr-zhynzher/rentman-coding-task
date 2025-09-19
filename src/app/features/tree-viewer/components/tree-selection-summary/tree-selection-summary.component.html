@@ -1,9 +1,4 @@
-<aside
-  *ngIf="!isSelectionEmpty()"
-  class="selection-display"
-  role="complementary"
-  aria-label="Selection summary"
->
+<aside *ngIf="!isSelectionEmpty()" class="selection-display">
   <h3 class="selection-display__title">
     Selected item IDs: {{ selectedItemIds() }}
   </h3>
