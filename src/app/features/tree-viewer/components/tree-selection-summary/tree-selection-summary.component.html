@@ -1,0 +1,17 @@
+<aside
+  *ngIf="!isSelectionEmpty()"
+  class="selection-display"
+  role="complementary"
+  aria-label="Selection summary"
+>
+  <h3 class="selection-display__title">
+    Selected item IDs: {{ selectedItemIds() }}
+  </h3>
+
+  <app-button
+    class="selection-display__button"
+    (buttonClick)="onClearSelection()"
+  >
+    Clear selection
+  </app-button>
+</aside>

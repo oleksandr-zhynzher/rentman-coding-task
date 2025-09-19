@@ -1,0 +1,22 @@
+<section
+  [class]="`tree-folder tree-folder--level-${folder().level + 1}`"
+  (click)="onFolderSelect()"
+>
+  <app-checkbox
+    class="tree-folder__checkbox"
+    [id]="`folder-${folder().id}`"
+    [label]="folder().title"
+    [checked]="checkboxState() === TreeCheckboxState.Checked"
+    [indeterminate]="checkboxState() === TreeCheckboxState.Indeterminate"
+    [classModifier]="'folder'"
+    (checkedChange)="onFolderSelect()"
+  >
+  </app-checkbox>
+
+  <app-chevron
+    class="tree-folder__toggle"
+    [expanded]="folder().expanded"
+    (iconClick)="onToggleExpand(); $event.stopPropagation()"
+  >
+  </app-chevron>
+</section>

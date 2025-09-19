@@ -1,0 +1,11 @@
+.app {
+  &__main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 324px;
+    margin: 40px auto 0;
+    padding: 24px;
+    background-color: var(--color-surface);
+  }
+}

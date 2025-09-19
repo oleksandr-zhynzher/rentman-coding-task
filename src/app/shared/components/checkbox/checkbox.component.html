@@ -1,0 +1,20 @@
+<fieldset
+  [class]="
+    'checkbox' +
+    (classModifier() ? ' checkbox--' + classModifier() : '') +
+    (indeterminate() ? ' checkbox--indeterminate' : '')
+  "
+>
+  <input
+    type="checkbox"
+    class="checkbox__input"
+    [id]="id()"
+    [checked]="checked()"
+    [indeterminate]="indeterminate()"
+    (change)="onCheckboxChange($event)"
+  />
+
+  <label *ngIf="label()" class="checkbox__label" [for]="id()">
+    {{ label() }}
+  </label>
+</fieldset>

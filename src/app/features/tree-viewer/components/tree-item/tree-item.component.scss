@@ -1,0 +1,25 @@
+.tree-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  min-height: 34px;
+  padding-right: 16px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-hover);
+  }
+
+  &__checkbox {
+    flex: 1;
+    pointer-events: none;
+  }
+
+  @for $level from 1 through 10 {
+    &--level-#{$level} {
+      padding-left: #{$level * 16}px;
+    }
+  }
+}

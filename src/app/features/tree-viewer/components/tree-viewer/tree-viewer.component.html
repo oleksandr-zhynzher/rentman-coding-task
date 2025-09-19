@@ -1,0 +1,30 @@
+<ng-container *ngIf="!loading() && !error()">
+  <section class="tree-viewer" role="tree" aria-label="File tree">
+    <ng-container *ngFor="let node of visibleNodes(); trackBy: trackByNodeId">
+      <app-tree-folder
+        *ngIf="isFolder(node)"
+        [folder]="node"
+        (folderToggle)="onFolderToggle()"
+        (folderSelect)="onFolderSelect($event)"
+      >
+      </app-tree-folder>
+
+      <app-tree-item
+        *ngIf="isItem(node)"
+        [item]="node"
+        (itemSelect)="onItemSelect($event)"
+      >
+      </app-tree-item>
+    </ng-container>
+  </section>
+
+  <app-tree-selection-summary
+    class="tree-viewer__selection-summary"
+  ></app-tree-selection-summary>
+</ng-container>
+
+<app-spinner *ngIf="loading()" class="tree-viewer__loading"></app-spinner>
+
+<app-message *ngIf="error()" class="tree-viewer__error" title="Loading Error">
+  {{ error() }}
+</app-message>

@@ -1,0 +1,13 @@
+<section
+  [class]="`tree-item tree-item--level-${item().level + 1}`"
+  (click)="onItemSelect()"
+>
+  <app-checkbox
+    class="tree-item__checkbox"
+    [id]="`item-${item().id}`"
+    [label]="item().title"
+    [checked]="isSelected()"
+    (checkedChange)="onItemSelect()"
+  >
+  </app-checkbox>
+</section>
