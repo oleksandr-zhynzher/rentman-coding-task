@@ -15,7 +15,6 @@ import {
 import { TreeDataService, TreeSelectionService } from '../../services';
 import { TreeFolderComponent } from '../tree-folder/tree-folder.component';
 import { TreeItemComponent } from '../tree-item/tree-item.component';
-import { TreeSelectionSummaryComponent } from '../tree-selection-summary/tree-selection-summary.component';
 import { SpinnerComponent, MessageComponent } from '../../../../shared';
 
 @Component({
@@ -27,7 +26,6 @@ import { SpinnerComponent, MessageComponent } from '../../../../shared';
     MessageComponent,
     TreeItemComponent,
     TreeFolderComponent,
-    TreeSelectionSummaryComponent,
   ],
   templateUrl: './tree-viewer.component.html',
   styleUrl: './tree-viewer.component.scss',
@@ -45,7 +43,7 @@ export class TreeViewerComponent implements OnInit {
 
   constructor(
     private readonly treeDataService: TreeDataService,
-    private readonly treeSelectionService: TreeSelectionService,
+    private readonly treeSelectionService: TreeSelectionService
   ) {}
 
   ngOnInit(): void {
