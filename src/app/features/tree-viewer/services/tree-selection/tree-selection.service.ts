@@ -4,42 +4,45 @@ import {
   TreeFolder,
   TreeItem,
   TreeNode,
-} from '../../models/tree-viewer.models';
+} from '../../models';
+import { isFolder } from '../../utils';
+import { TreeDataBuilderService } from '../tree-data-builder/tree-data-builder.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TreeSelectionService {
-  private readonly selectedItemIdsState = signal<Set<number>>(new Set());
-  private readonly treeDataState = signal<TreeNode[]>([]);
-
-  readonly selectedItemIds = this.selectedItemIdsState.asReadonly();
-  readonly treeData = this.treeDataState.asReadonly();
-
-  readonly selectedItemIdsArray = computed(() =>
+  readonly selectedItemIds = computed(() =>
     Array.from(this.selectedItemIdsState()).sort(
       (itemIdA, itemIdB) => itemIdA - itemIdB,
     ),
   );
+  readonly selectedItemIdsString = computed(() =>
+    this.selectedItemIds().join(', '),
+  );
+  readonly flattenedTreeData = computed(() =>
+    this.treeDataBuilderService.flattenVisibleNodes(this.treeDataState()),
+  );
 
-  readonly selectedItemCount = computed(() => this.selectedItemIdsState().size);
+  private readonly selectedItemIdsState = signal<Set<number>>(new Set());
+  private readonly treeDataState = signal<TreeNode[]>([]);
+  private readonly folderStates = computed(() =>
+    this.calculateFolderStates(this.treeDataState()),
+  );
 
-  readonly hasSelection = computed(() => this.selectedItemIdsState().size > 0);
-
-  readonly folderStates = computed(() => {
-    const stateMap = new Map<number, TreeCheckboxState>();
-    const allFolderNodes = this.extractAllFolders(this.treeDataState());
-
-    for (const folderNode of allFolderNodes) {
-      stateMap.set(folderNode.id, this.determineFolderState(folderNode));
-    }
-
-    return stateMap;
-  });
+  constructor(
+    private readonly treeDataBuilderService: TreeDataBuilderService,
+  ) {}
 
   updateTreeData(newTreeData: TreeNode[]): void {
     this.treeDataState.set(newTreeData);
     this.clearAllSelections();
+  }
+
+  onFolderToggle(updatedFolder: TreeFolder): void {
+    this.treeDataState.update((currentTree) =>
+      this.updateFolderInTree(currentTree, updatedFolder),
+    );
   }
 
   toggleItemSelection(targetItemId: number): void {
@@ -63,35 +66,12 @@ export class TreeSelectionService {
     this.selectedItemIdsState.update((currentSelectionSet) => {
       const updatedSelectionSet = new Set(currentSelectionSet);
 
-      if (currentFolderState === TreeCheckboxState.Checked) {
-        for (const folderItem of folderItems) {
-          updatedSelectionSet.delete(folderItem.id);
+      for (const folderItem of folderItems) {
+        if (currentFolderState === TreeCheckboxState.Checked) {
+          updatedSelectionSet.delete(folderItem.originalId);
+        } else {
+          updatedSelectionSet.add(folderItem.originalId);
         }
-      } else {
-        for (const folderItem of folderItems) {
-          updatedSelectionSet.add(folderItem.id);
-        }
-      }
-
-      return updatedSelectionSet;
-    });
-  }
-
-  selectMultipleItems(itemIdsToSelect: number[]): void {
-    this.selectedItemIdsState.update((currentSelectionSet) => {
-      const updatedSelectionSet = new Set(currentSelectionSet);
-      for (const itemIdToSelect of itemIdsToSelect) {
-        updatedSelectionSet.add(itemIdToSelect);
-      }
-      return updatedSelectionSet;
-    });
-  }
-
-  deselectMultipleItems(itemIdsToDeselect: number[]): void {
-    this.selectedItemIdsState.update((currentSelectionSet) => {
-      const updatedSelectionSet = new Set(currentSelectionSet);
-      for (const itemIdToDeselect of itemIdsToDeselect) {
-        updatedSelectionSet.delete(itemIdToDeselect);
       }
       return updatedSelectionSet;
     });
@@ -99,12 +79,6 @@ export class TreeSelectionService {
 
   clearAllSelections(): void {
     this.selectedItemIdsState.set(new Set());
-  }
-
-  selectAllItems(): void {
-    const allTreeItems = this.extractAllItems(this.treeDataState());
-    const allItemIds = allTreeItems.map((treeItem) => treeItem.id);
-    this.selectedItemIdsState.set(new Set(allItemIds));
   }
 
   isItemSelected(targetItemId: number): boolean {
@@ -117,75 +91,111 @@ export class TreeSelectionService {
     );
   }
 
+  private calculateFolderStates(
+    treeData: TreeNode[],
+  ): Map<number, TreeCheckboxState> {
+    const stateMap = new Map<number, TreeCheckboxState>();
+    const allFolderNodes = this.extractAllFolders(treeData);
+
+    for (const folderNode of allFolderNodes) {
+      stateMap.set(
+        folderNode.originalId,
+        this.determineFolderState(folderNode),
+      );
+    }
+
+    return stateMap;
+  }
+
   private determineFolderState(targetFolder: TreeFolder): TreeCheckboxState {
     const folderItems = this.extractAllItemsFromFolder(targetFolder);
 
-    if (folderItems.length === 0) {
+    if (!folderItems.length) {
       return TreeCheckboxState.Unchecked;
     }
 
     const selectedItemsCount = folderItems.reduce((accumulator, folderItem) => {
-      return this.selectedItemIdsState().has(folderItem.id)
+      return this.selectedItemIdsState().has(folderItem.originalId)
         ? accumulator + 1
         : accumulator;
     }, 0);
 
-    if (selectedItemsCount === 0) {
-      return TreeCheckboxState.Unchecked;
-    } else if (selectedItemsCount === folderItems.length) {
-      return TreeCheckboxState.Checked;
-    } else {
-      return TreeCheckboxState.Indeterminate;
+    return this.getCheckboxStateBySelectionCount(
+      selectedItemsCount,
+      folderItems.length,
+    );
+  }
+
+  private getCheckboxStateBySelectionCount(
+    selectedCount: number,
+    totalCount: number,
+  ): TreeCheckboxState {
+    switch (true) {
+      case selectedCount === 0:
+        return TreeCheckboxState.Unchecked;
+      case selectedCount === totalCount:
+        return TreeCheckboxState.Checked;
+      case selectedCount > 0 && selectedCount < totalCount:
+        return TreeCheckboxState.Indeterminate;
+      default:
+        return TreeCheckboxState.Unchecked;
     }
   }
 
   private extractAllItemsFromFolder(targetFolder: TreeFolder): TreeItem[] {
-    const collectedItems: TreeItem[] = [];
-
-    const traverseAndCollectItems = (childNodes: TreeNode[]): void => {
-      for (const childNode of childNodes) {
-        if ('children' in childNode) {
-          traverseAndCollectItems(childNode.children);
-        } else {
-          collectedItems.push(childNode);
-        }
-      }
-    };
-
-    traverseAndCollectItems(targetFolder.children);
-    return collectedItems;
-  }
-
-  private extractAllItems(treeNodes: TreeNode[]): TreeItem[] {
-    const collectedItems: TreeItem[] = [];
-
-    const traverseAndCollectItems = (nodeList: TreeNode[]): void => {
-      for (const treeNode of nodeList) {
-        if ('children' in treeNode) {
-          traverseAndCollectItems(treeNode.children);
-        } else {
-          collectedItems.push(treeNode);
-        }
-      }
-    };
-
-    traverseAndCollectItems(treeNodes);
-    return collectedItems;
+    return this.traverseAndCollect(
+      targetFolder.children,
+      (node) => !isFolder(node),
+      (node) => node as TreeItem,
+    );
   }
 
   private extractAllFolders(treeNodes: TreeNode[]): TreeFolder[] {
-    const collectedFolders: TreeFolder[] = [];
+    return this.traverseAndCollect(
+      treeNodes,
+      (node) => isFolder(node),
+      (node) => node as TreeFolder,
+    );
+  }
 
-    const traverseAndCollectFolders = (nodeList: TreeNode[]): void => {
-      for (const treeNode of nodeList) {
-        if ('children' in treeNode) {
-          collectedFolders.push(treeNode);
-          traverseAndCollectFolders(treeNode.children);
+  private traverseAndCollect<T extends TreeNode>(
+    nodes: TreeNode[],
+    predicate: (node: TreeNode) => boolean,
+    mapper: (node: TreeNode) => T,
+  ): T[] {
+    const collected: T[] = [];
+
+    const traverse = (nodeList: TreeNode[]): void => {
+      for (const node of nodeList) {
+        if (predicate(node)) {
+          collected.push(mapper(node));
+        }
+
+        if (isFolder(node)) {
+          traverse(node.children);
         }
       }
     };
 
-    traverseAndCollectFolders(treeNodes);
-    return collectedFolders;
+    traverse(nodes);
+    return collected;
+  }
+
+  private updateFolderInTree(
+    treeNodes: TreeNode[],
+    updatedFolder: TreeFolder,
+  ): TreeNode[] {
+    return treeNodes.map((node) => {
+      if (!isFolder(node)) {
+        return node;
+      }
+
+      return node.id === updatedFolder.id
+        ? updatedFolder
+        : {
+            ...node,
+            children: this.updateFolderInTree(node.children, updatedFolder),
+          };
+    });
   }
 }

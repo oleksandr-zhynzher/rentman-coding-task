@@ -5,6 +5,7 @@
 ## Quick Start
 
 1. **Install all dependencies:**
+
    ```bash
    npm run install:all
    ```

@@ -14,7 +14,9 @@
     (change)="onCheckboxChange($event)"
   />
 
-  <label *ngIf="label()" class="checkbox__label" [for]="id()">
-    {{ label() }}
-  </label>
+  @if (label()) {
+    <label class="checkbox__label" [for]="id()">
+      {{ label() }}
+    </label>
+  }
 </fieldset>

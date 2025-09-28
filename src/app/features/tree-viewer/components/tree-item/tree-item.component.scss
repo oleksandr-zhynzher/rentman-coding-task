@@ -19,7 +19,7 @@
 
   @for $level from 1 through 10 {
     &--level-#{$level} {
-      padding-left: #{$level * 16}px;
+      padding-left: #{($level + 1) * 16}px;
     }
   }
 }

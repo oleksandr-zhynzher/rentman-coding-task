@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TreeSelectionService } from '../../services';
 import { ButtonComponent } from '../../../../shared';
@@ -12,17 +12,13 @@ import { ButtonComponent } from '../../../../shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeSelectionSummaryComponent {
-  readonly selectedItemIds = computed(() =>
-    this.treeSelectionService.selectedItemIdsArray().join(', '),
-  );
-
-  readonly isSelectionEmpty = computed(
-    () => !this.treeSelectionService.hasSelection(),
-  );
-
   constructor(private readonly treeSelectionService: TreeSelectionService) {}
 
-  onClearSelection(): void {
+  protected get selectedItemIdsString() {
+    return this.treeSelectionService.selectedItemIdsString;
+  }
+
+  protected onClearSelection(): void {
     this.treeSelectionService.clearAllSelections();
   }
 }

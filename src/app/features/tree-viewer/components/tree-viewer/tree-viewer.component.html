@@ -1,24 +1,31 @@
-<section *ngIf="!loading() && !error()" class="tree-viewer">
-  <ng-container *ngFor="let node of visibleNodes(); trackBy: trackByNodeId">
-    <app-tree-folder
-      *ngIf="isFolder(node)"
-      [folder]="node"
-      (folderToggle)="onFolderToggle()"
-      (folderSelect)="onFolderSelect($event)"
-    >
-    </app-tree-folder>
+@if (!treeDataResource.isLoading()) {
+  <section class="tree-viewer">
+    @for (node of flattenedTreeData(); track node.id) {
+      @if (isFolder(node)) {
+        <app-tree-folder
+          [folder]="node"
+          (folderSelect)="onFolderSelect($event)"
+          (folderToggle)="onFolderToggle($event)"
+        >
+        </app-tree-folder>
+      } @else {
+        <app-tree-item [item]="node" (itemSelect)="onItemSelect($event)">
+        </app-tree-item>
+      }
+    } @empty {
+      @if (!treeDataResource.error()) {
+        <app-message class="tree-viewer__empty" title="No Data">
+          No tree data available.
+        </app-message>
+      }
+    }
+  </section>
+} @else {
+  <app-spinner class="tree-viewer__loading"></app-spinner>
+}
 
-    <app-tree-item
-      *ngIf="isItem(node)"
-      [item]="node"
-      (itemSelect)="onItemSelect($event)"
-    >
-    </app-tree-item>
-  </ng-container>
-</section>
-
-<app-spinner *ngIf="loading()" class="tree-viewer__loading"></app-spinner>
-
-<app-message *ngIf="error()" class="tree-viewer__error" title="Loading Error">
-  {{ error() }}
-</app-message>
+@if (treeDataResource.error()) {
+  <app-message class="tree-viewer__error" title="Loading Error">
+    Oops! Something went wrong. Please try again later.
+  </app-message>
+}

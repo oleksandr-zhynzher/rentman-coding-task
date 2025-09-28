@@ -18,9 +18,38 @@
     pointer-events: none;
   }
 
-  @for $level from 1 through 10 {
+  &__toggle {
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  &--empty {
+    opacity: 0.7;
+  }
+
+  &__empty-message {
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    @for $level from 1 through 10 {
+      &--level-#{$level} {
+        padding-left: #{$level * 16}px;
+      }
+    }
+  }
+
+  &__empty-content {
+    font-size: 12px;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  @for $level from 0 through 10 {
     &--level-#{$level} {
-      padding-left: #{$level * 16}px;
+      padding-left: #{($level + 1) * 16}px;
     }
   }
 }

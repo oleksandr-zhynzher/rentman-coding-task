@@ -6,9 +6,10 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TreeFolder, TreeCheckboxState } from '../../models/tree-viewer.models';
+import { TreeFolder, TreeCheckboxState } from '../../models';
 import { TreeSelectionService } from '../../services';
 import { ChevronComponent, CheckboxComponent } from '../../../../shared';
+import { isFolderEmpty } from '../../utils';
 
 @Component({
   selector: 'app-tree-folder',
@@ -23,23 +24,32 @@ export class TreeFolderComponent {
   readonly folderToggle = output<TreeFolder>();
   readonly folderSelect = output<TreeFolder>();
 
-  readonly TreeCheckboxState = TreeCheckboxState;
+  protected readonly TreeCheckboxState = TreeCheckboxState;
 
   readonly checkboxState = computed(() =>
-    this.treeSelectionService.getFolderCheckboxState(this.folder().id),
+    this.treeSelectionService.getFolderCheckboxState(this.folder().originalId),
   );
 
-  readonly isExpanded = computed(() => this.folder().expanded);
+  readonly isEmpty = computed(() => isFolderEmpty(this.folder()));
 
   constructor(private readonly treeSelectionService: TreeSelectionService) {}
 
-  onToggleExpand(): void {
+  protected onToggleExpand(): void {
+    if (this.isEmpty()) {
+      return;
+    }
+
     const currentFolder = this.folder();
-    currentFolder.expanded = !currentFolder.expanded;
-    this.folderToggle.emit(currentFolder);
+
+    const updatedFolder: TreeFolder = {
+      ...currentFolder,
+      expanded: !currentFolder.expanded,
+    };
+
+    this.folderToggle.emit(updatedFolder);
   }
 
-  onFolderSelect(): void {
+  protected onFolderSelect(): void {
     this.folderSelect.emit(this.folder());
   }
 }

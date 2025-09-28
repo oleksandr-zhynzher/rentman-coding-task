@@ -4,4 +4,4 @@ export * from './components/tree-folder/tree-folder.component';
 export * from './components/tree-item/tree-item.component';
 export * from './components/tree-selection-summary/tree-selection-summary.component';
 export * from './services';
-export * from './models/tree-viewer.models';
+export * from './models';

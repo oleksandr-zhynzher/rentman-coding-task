@@ -1,0 +1,177 @@
+{
+  "folders": {
+    "columns": ["id", "title", "parent_id"],
+    "data": [
+      [1, "Audio Equipment", null],
+      [2, "Lighting Equipment", null],
+      [3, "Video Equipment", null],
+      [4, "Rigging & Staging", null],
+      [5, "Power & Cables", null],
+
+      [10, "Speakers", 1],
+      [11, "Microphones", 1],
+      [12, "Mixing Consoles", 1],
+      [13, "Audio Processors", 1],
+      [14, "Amplifiers", 1],
+
+      [20, "LED Fixtures", 2],
+      [21, "Moving Lights", 2],
+      [22, "Conventional Lights", 2],
+      [23, "Control Systems", 2],
+      [24, "Effects & Haze", 2],
+
+      [30, "Cameras", 3],
+      [31, "Projectors", 3],
+      [32, "Monitors & Displays", 3],
+      [33, "Video Switchers", 3],
+      [34, "Recording Equipment", 3],
+
+      [40, "Truss Systems", 4],
+      [41, "Staging Platforms", 4],
+      [42, "Hoists & Motors", 4],
+      [43, "Clamps & Hardware", 4],
+
+      [50, "Power Distribution", 5],
+      [51, "Audio Cables", 5],
+      [52, "Video Cables", 5],
+      [53, "Lighting Cables", 5],
+      [54, "Extension Cords", 5],
+
+      [100, "Active Speakers", 10],
+      [101, "Passive Speakers", 10],
+      [102, "Subwoofers", 10],
+      [103, "Monitor Speakers", 10],
+
+      [110, "Wireless Microphones", 11],
+      [111, "Wired Microphones", 11],
+      [112, "Lavalier Microphones", 11],
+      [113, "Instrument Microphones", 11],
+
+      [200, "LED Panels", 20],
+      [201, "LED Strips", 20],
+      [202, "LED Par Lights", 20],
+
+      [210, "Moving Head Spots", 21],
+      [211, "Moving Head Wash", 21],
+      [212, "Moving Head Beam", 21],
+
+      [300, "DSLR Cameras", 30],
+      [301, "Professional Cameras", 30],
+      [302, "PTZ Cameras", 30],
+
+      [310, "Short Throw Projectors", 31],
+      [311, "Long Throw Projectors", 31],
+      [312, "Laser Projectors", 31]
+    ]
+  },
+  "items": {
+    "columns": ["id", "title", "folder_id"],
+    "data": [
+      [1, "JBL VTX V25 Line Array Speaker", 100],
+      [2, "QSC K12.2 Active Speaker", 100],
+      [3, "Meyer Sound UPA-1P", 100],
+      [4, "d&b audiotechnik Y7P", 100],
+      [5, "L-Acoustics KARA", 100],
+
+      [10, "JBL SRX828SP Subwoofer", 102],
+      [11, "QSC KS212C Subwoofer", 102],
+      [12, "Meyer Sound 750-LFC", 102],
+      [13, "d&b audiotechnik Y-SUB", 102],
+
+      [20, "Shure SM58 Dynamic Microphone", 111],
+      [21, "Neumann U87 Condenser Mic", 111],
+      [22, "AKG C414 XLII", 111],
+      [23, "Electro-Voice RE20", 111],
+      [24, "Rode PodMic", 111],
+
+      [30, "Shure ULXD2/SM58 Wireless", 110],
+      [31, "Sennheiser EW 100 G4", 110],
+      [32, "Audio-Technica ATW-3212", 110],
+      [33, "Shure QLXD2/BETA87A", 110],
+
+      [40, "Yamaha CL5 Digital Console", 12],
+      [41, "Allen & Heath dLive S7000", 12],
+      [42, "Midas M32 Digital Mixer", 12],
+      [43, "Soundcraft Vi3000", 12],
+
+      [50, "Crown XTi 6002 Amplifier", 14],
+      [51, "QSC PLD4.5 Power Amp", 14],
+      [52, "Lab.gruppen FP 10000Q", 14],
+      [53, "Powersoft X8", 14],
+
+      [60, "Martin MAC Aura XB LED", 200],
+      [61, "Chauvet Rogue R2X Wash", 200],
+      [62, "ETC ColorSource PAR", 200],
+      [63, "Ayrton MagicPanel-R", 200],
+
+      [70, "Clay Paky Sharpy Plus", 210],
+      [71, "Martin MAC Viper Profile", 210],
+      [72, "Robe Pointe Moving Light", 210],
+      [73, "GLP impression X4 Bar 20", 210],
+
+      [80, "ETC Ion Xe 20 Console", 23],
+      [81, "MA Lighting grandMA3 compact", 23],
+      [82, "Chamsys MagicQ MQ70", 23],
+      [83, "Avolites Tiger Touch II", 23],
+
+      [90, "Canon EOS C300 Mark III", 301],
+      [91, "Sony FX9 Full-Frame Camera", 301],
+      [92, "Blackmagic URSA Mini Pro 12K", 301],
+      [93, "RED Komodo 6K Camera", 301],
+
+      [100, "Sony PTZ-A70 4K Camera", 302],
+      [101, "Canon CR-N500 PTZ Camera", 302],
+      [102, "Panasonic AW-UE150 4K PTZ", 302],
+
+      [110, "Epson Pro L1755U Projector", 311],
+      [111, "Christie D13WU-H Projector", 311],
+      [112, "Barco UDX-4K32 Projector", 311],
+      [113, "Panasonic PT-RZ31K Projector", 311],
+
+      [120, "Samsung QM85R 85\" Display", 32],
+      [121, "LG 86UN8570PUC 86\" TV", 32],
+      [122, "Sony FW-85BZ40H 85\" Display", 32],
+      [123, "NEC MultiSync X981UHD", 32],
+
+      [130, "Blackmagic ATEM 2 M/E", 33],
+      [131, "Roland V-60HD Video Mixer", 33],
+      [132, "NewTek TriCaster TC1", 33],
+      [133, "Panasonic AV-HS60U2", 33],
+
+      [140, "Prolyte H30V Truss 2m", 40],
+      [141, "Global Truss F34 Square", 40],
+      [142, "Milos M290 Triangular Truss", 40],
+      [143, "Litec QX30SA Truss", 40],
+
+      [150, "Stageline SL100 Platform 2x1m", 41],
+      [151, "Intellistage 4x4ft Platform", 41],
+      [152, "Wenger StageTek Platform", 41],
+      [153, "Staging Concepts Portable Stage", 41],
+
+      [160, "CM Lodestar 1 Ton Hoist", 42],
+      [161, "Verlinde Stagemaker SR5", 42],
+      [162, "ChainMaster D8+ 500kg", 42],
+      [163, "KITO CX Electric Hoist", 42],
+
+      [170, "Doughty Superclamp", 43],
+      [171, "Global Truss Half Coupler", 43],
+      [172, "Manfrotto Super Clamp", 43],
+      [173, "Matthews Mafer Clamp", 43],
+
+      [180, "Socapex 19\" Power Rack", 50],
+      [181, "Lex Products PD-963R", 50],
+      [182, "TMB ProPlex IDD", 50],
+      [183, "ETC Sensor3 Dimmer", 50],
+
+      [190, "Mogami 2534 XLR Cable 15m", 51],
+      [191, "Canare L-4E6S Quad Cable", 51],
+      [192, "Neutrik NC3MXX Connector", 51],
+      [193, "Whirlwind Mass Connector", 51],
+
+      [200, "Belden 1694A SDI Cable 50m", 52],
+      [201, "Kramer C-HM/HM HDMI Cable", 52],
+      [202, "Gepco VDM230 HD-SDI Cable", 52],
+      [203, "Monster Cable THX V100CV", 52]
+    ]
+  }
+}

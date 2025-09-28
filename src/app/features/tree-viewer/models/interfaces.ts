@@ -1,28 +1,29 @@
 import { TreeNode } from './types';
 
 export interface TreeFolder {
-  id: number;
+  id: string;
+  originalId: number;
   title: string;
   expanded: boolean;
   level: number;
-  parentId: number | null;
+  parentId: string | null;
   children: TreeNode[];
 }
 
 export interface TreeItem {
-  id: number;
+  id: string;
+  originalId: number;
   title: string;
-  folderId: number | null;
+  folderId: string | null;
   level: number;
 }
 
+export interface ApiDataSection<T> {
+  columns: string[];
+  data: T[];
+}
+
 export interface ApiResponse {
-  folders: {
-    columns: string[];
-    data: string[];
-  };
-  items: {
-    columns: string[];
-    data: string[];
-  };
+  folders: ApiDataSection<unknown[]>;
+  items: ApiDataSection<unknown[]>;
 }

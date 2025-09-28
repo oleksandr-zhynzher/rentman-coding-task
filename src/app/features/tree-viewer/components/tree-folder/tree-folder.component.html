@@ -1,10 +1,13 @@
 <section
-  [class]="`tree-folder tree-folder--level-${folder().level + 1}`"
+  [class]="`tree-folder tree-folder--level-${folder().level}`"
+  [ngClass]="{
+    'tree-folder--empty': isEmpty(),
+  }"
   (click)="onFolderSelect()"
 >
   <app-checkbox
     class="tree-folder__checkbox"
-    [id]="`folder-${folder().id}`"
+    [id]="folder().id"
     [label]="folder().title"
     [checked]="checkboxState() === TreeCheckboxState.Checked"
     [indeterminate]="checkboxState() === TreeCheckboxState.Indeterminate"
@@ -13,10 +16,14 @@
   >
   </app-checkbox>
 
-  <app-chevron
-    class="tree-folder__toggle"
-    [expanded]="folder().expanded"
-    (iconClick)="onToggleExpand(); $event.stopPropagation()"
-  >
-  </app-chevron>
+  @if (!isEmpty()) {
+    <app-chevron
+      class="tree-folder__toggle"
+      [expanded]="folder().expanded"
+      (iconClick)="onToggleExpand(); $event.stopPropagation()"
+    >
+    </app-chevron>
+  } @else {
+    <p class="tree-folder__message">(empty)</p>
+  }
 </section>
