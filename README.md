@@ -1,6 +1,10 @@
 # Tree Viewer Application
 
-**Requirements:** Node.js 18.19.0 or higher
+## Requirements
+
+- **Node.js**: v20.19.0, v22.12.0 or higher (recommended: v22.20.0 LTS)
+- **npm**: 8.0.0 or higher
+
 
 ## Quick Start
 
